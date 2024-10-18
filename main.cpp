@@ -1,9 +1,9 @@
-#include <iostream>
 
-using namespace std;
+extern int button_example_run();
+
 
 int main()
 {
-    cout << "Hello World!" << endl;
+    button_example_run();
     return 0;
 }

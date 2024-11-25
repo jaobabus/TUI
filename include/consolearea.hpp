@@ -37,7 +37,10 @@ public:
         for (unsigned y = 0; y < std::min<unsigned>(area->size.y, size.y); y++)
             for (unsigned x = 0; x < std::min<unsigned>(area->size.x, size.x); x++)
                 area->set_char({x, y}, CharUnit{get_char({x, y})});
+        constexpr auto j = sizeof(area);
     }
+
+    void f(int ff) {}
 
 public:
     Vector2u size;
@@ -45,7 +48,7 @@ public:
 };
 
 inline static
-void draw(ConsoleArea* area, Vector2u pos, std::string const& str, std::vector<uint8_t> const& styles = {})
+void draw(ConsoleArea* area, Vector2u pos, std::string const& str, CharUnit::Meta const& styles = {})
 {
     if (pos.x >= area->size.x or pos.y >= area->size.y)
         return;
@@ -60,7 +63,7 @@ void draw(ConsoleArea* area, Vector2u pos, std::string const& str, std::vector<u
         }
         if (y >= area->size.y)
             break;
-        area->set_char({x, y}, {c});
+        area->set_char({x, y}, {c, styles});
         ++x;
     }
 }

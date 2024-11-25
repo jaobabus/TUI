@@ -33,7 +33,7 @@ public:
 
 
 
-using AnyConsoleEvent = std::variant<conevent::FocusEvent, conevent::MouseEnterExitEvent, conevent::MouseButtonEvent, conevent::MouseMoveEvent, conevent::KeyboardEvent>;
+using AnyConsoleEvent = std::variant<conevent::FocusEvent, conevent::MouseEnterExitEvent, conevent::MouseButtonEvent, conevent::MouseMoveEvent, conevent::KeyboardEvent, conevent::XTermStatusEvent, conevent::XTermDSRPositionEvent>;
 
 class ExtendedConsoleEventReceiver : public ConsoleEventReceiver
 {
@@ -51,6 +51,12 @@ public:
         on_any_event({event});
     }
     void on_event(const conevent::KeyboardEvent& event) override {
+        on_any_event({event});
+    }
+    void on_event(const conevent::XTermStatusEvent& event) override {
+        on_any_event({event});
+    }
+    void on_event(const conevent::XTermDSRPositionEvent& event) override {
         on_any_event({event});
     }
 

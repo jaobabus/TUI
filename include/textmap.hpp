@@ -8,7 +8,7 @@
 class TextMap : public ConsoleArea
 {
 public:
-    TextMap(Vector2u size)
+    TextMap(Vector2u size = {0, 0})
         : ConsoleArea(size)
     {
         _map.resize(size.x * size.y, CharUnit::none);
@@ -29,6 +29,8 @@ public:
 
 public:
     static TextMap create_from(std::string const& tex);
+    void load_from(std::string const& tex);
+    void resize(Vector2u size);
 
 public:
     TextMap strip() const;

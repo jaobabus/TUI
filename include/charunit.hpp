@@ -82,7 +82,7 @@ public:
 
 struct CharUnit {
     wchar_t character;               //< The character to be displayed
-    struct {
+    struct Meta {
         CharColor256Bg background;   //< Background color
         CharColor256Fg foreground;   //< Foreground color
         uint16_t styles;             //< Bitfield representing styles, where each bit corresponds to a style ID
@@ -99,7 +99,7 @@ inline constexpr EscapeSeqArgument encode_color_4bit(CharColor256Fg color) {
     if (color.term_color < 8)
         return encode_number(static_cast<int>(AsciiStyleCode::Foregrount4StartLower) + color.term_color);
     else
-        return encode_number(static_cast<int>(AsciiStyleCode::Foregrount4StartUpper) + color.term_color);
+        return encode_number(static_cast<int>(AsciiStyleCode::Foregrount4StartUpper) + color.term_color - 8);
 }
 
 
@@ -107,7 +107,7 @@ inline constexpr EscapeSeqArgument encode_color_4bit(CharColor256Bg color) {
     if (color.term_color < 8)
         return encode_number(static_cast<int>(AsciiStyleCode::Background4StartLower) + color.term_color);
     else
-        return encode_number(static_cast<int>(AsciiStyleCode::Background4StartUpper) + color.term_color);
+        return encode_number(static_cast<int>(AsciiStyleCode::Background4StartUpper) + color.term_color - 8);
 }
 
 

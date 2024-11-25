@@ -45,6 +45,11 @@ class ViewNotifier;
 class ConsoleView : public ConsoleEventReceiver, public std::enable_shared_from_this<ConsoleView>
 {
 public:
+    ConsoleView(const ConsoleView &) = delete;
+    ConsoleView(ConsoleView &&) = default;
+    ConsoleView &operator=(const ConsoleView &) = delete;
+    ConsoleView &operator=(ConsoleView &&) = default;
+
     ConsoleView(std::string&& label) : label(std::move(label)) {}
     virtual ~ConsoleView() = default;
 
@@ -52,9 +57,10 @@ public:
     virtual void draw(ConsoleArea* area) const = 0;
     virtual void notify(const ViewNotifier* notifier) {}
     virtual bool contains(Vector2u pos) const = 0;
+    virtual const ViewNotifier* primary_widget() const { return nullptr; }
 
 public:
-    const std::string label;
+    std::string label;
 
 protected:
     bool mouse_inside = false;
@@ -71,7 +77,8 @@ public:
 
 public:
     // Constructor and Destructor
-    ViewNotifier() {
+    ViewNotifier(std::string&& plabel = {"<unspecified>"})
+        : label(std::move(plabel)) {
         Log->trace("ViewNotifier::created");
     }
 
@@ -99,6 +106,9 @@ public:
         Log->trace("ViewNotifier::add_view");
         view_ptrs.emplace_back(view);
     }
+
+public:
+    std::string label;
 
 private:
     // Data Members

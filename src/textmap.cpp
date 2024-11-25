@@ -93,6 +93,25 @@ TextMap TextMap::create_from(const std::string& tex)
     return map.strip();
 }
 
+void TextMap::load_from(const std::string& tex)
+{
+    TextMap map{{240, 120}};
+    ::draw(&map, {0, 0}, tex);
+    *this = map.strip();
+}
+
+void TextMap::resize(Vector2u size)
+{
+    std::vector<CharUnit> new_area(size.x * size.y, CharUnit{});
+    for (size_t y = 0; y < std::min<size_t>(size.y, this->size.y); y++) {
+        for (size_t x = 0; x < std::min<size_t>(size.x, this->size.x); x++) {
+            new_area[x + y * size.y] = std::move(_map[x + y * this->size.y]);
+        }
+    }
+    _map = new_area;
+    this->size = size;
+}
+
 TextMap TextMap::strip() const
 {
     Vector2i left_min{0x7F7F7FFF, 0x7F7F7FFF}, right_max{-1, -1};

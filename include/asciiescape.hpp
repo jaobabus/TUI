@@ -1,8 +1,9 @@
 #pragma once
 
+#include <cstdint>
 
 
-enum class AsciiStyleCode {
+enum class AsciiStyleCode : uint8_t {
     Normal = 0,
     Bold = 1,
     Faint = 2,

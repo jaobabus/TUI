@@ -3,20 +3,21 @@
 
 
 
-ConsoleZBuffer::ConsoleZBuffer() : ConsoleView("Z buffer") {
-    Log->trace("ConsoleZBuffer::created");
-}
+ConsoleZBuffer::ConsoleZBuffer() : ConsoleView("Z buffer") {}
 
-ConsoleZBuffer::~ConsoleZBuffer() {
-    Log->trace("ConsoleZBuffer::destroyed");
-}
+ConsoleZBuffer::~ConsoleZBuffer() {}
 
-void ConsoleZBuffer::add_view(std::shared_ptr<ConsoleViewWidget> &&view) {
-    Log->trace("ConsoleZBuffer::add_view");
+void ConsoleZBuffer::add_view(std::shared_ptr<ConsoleViewWidget>&& view) {
+    auto name = view->get_view()->label;
+    for (auto& view : views)
+    {
+        if (name == view->get_view()->label)
+            throw std::runtime_error("View " + name + " already exists");
+    }
     views.push_back(std::move(view));
 }
 
-void ConsoleZBuffer::notify(const ViewNotifier *notifier) {
+void ConsoleZBuffer::notify(const ViewNotifier* notifier) {
     Log->trace("ConsoleZBuffer::notify");
     // пока что игнорим draw у нас полностью переписывает все
 }
@@ -29,13 +30,23 @@ void ConsoleZBuffer::draw(ConsoleArea *area) const {
     }
 }
 
-ConsoleViewWidget *ConsoleZBuffer::get_widget_at(Vector2u position) {
+ConsoleViewWidget* ConsoleZBuffer::get_widget_at(Vector2u position) {
     for (auto it = views.rbegin(); it != views.rend(); ++it) {
         auto pos = (*it)->get_position();
         auto off = position - pos;
         if (position >= pos and (*it)->get_view()->contains(off)) {
             return it->get();
         }
+    }
+    return nullptr;
+}
+
+ConsoleViewWidget* ConsoleZBuffer::get_widget_at(std::string_view name)
+{
+    for (auto& view : views)
+    {
+        if (name == view->get_view()->label)
+            return view.get();
     }
     return nullptr;
 }

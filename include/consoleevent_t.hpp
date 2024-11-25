@@ -83,6 +83,7 @@ struct MouseEnterExitEvent
 {
     bool is_enter;
     Vector2u position;
+    CtrlStatus status;
 };
 
 
